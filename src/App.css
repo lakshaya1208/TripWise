@@ -1,0 +1,49 @@
+/* ==========================================================================
+   TripWise Application Layout & Responsive Styles
+   ========================================================================== */
+
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  .mobile-toggle {
+    display: block !important;
+  }
+}
+
+/* Itinerary Card Responsive Layout */
+@media (max-width: 768px) {
+  .itinerary-card {
+    flex-direction: column !important;
+  }
+  .itinerary-image-col {
+    width: 100% !important;
+    height: 180px !important;
+  }
+  .itinerary-day-col {
+    width: 100% !important;
+    flex-direction: row !important;
+    padding: 10px 16px !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+  }
+}
+
+/* Accessibility focus rings */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--blue-light);
+  outline-offset: 2px;
+}
