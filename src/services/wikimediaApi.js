@@ -210,6 +210,54 @@ export async function searchWikimediaDestinations(query) {
 }
 
 /**
+ * Autocomplete prefix search using Wikimedia Action API
+ * Returns real destination suggestions with titles, descriptions, and thumbnails
+ */
+export async function fetchAutocompleteSuggestions(query) {
+  if (!query || query.trim().length < 2) {
+    return [];
+  }
+
+  const trimmed = query.trim();
+  const cacheKey = `autocomplete_${trimmed.toLowerCase()}`;
+  if (memoryCache.has(cacheKey)) {
+    return memoryCache.get(cacheKey);
+  }
+
+  const endpoint = `https://en.wikipedia.org/w/api.php?action=query&generator=prefixsearch&gpssearch=${encodeURIComponent(
+    trimmed
+  )}&gpslimit=8&prop=pageimages|description|extracts&piprop=thumbnail&pithumbsize=160&exintro=1&explaintext=1&exchars=120&format=json&origin=*`;
+
+  const response = await fetch(endpoint);
+  if (!response.ok) {
+    throw new Error(`Autocomplete query failed with status ${response.status}`);
+  }
+
+  const data = await response.json();
+  if (!data.query || !data.query.pages) {
+    return [];
+  }
+
+  const pages = Object.values(data.query.pages);
+
+  // Filter out disambiguation pages and people/musicians when clearly irrelevant
+  const results = pages
+    .sort((a, b) => (a.index || 99) - (b.index || 99))
+    .map((page) => ({
+      id: page.pageid,
+      title: page.title,
+      rawTitle: page.title,
+      description: page.description || page.extract?.slice(0, 90) + '...' || 'Destination on Wikimedia',
+      thumbnail: page.thumbnail?.source || null,
+      country: extractCountryHint(page.description || page.extract || page.title),
+      extract: page.extract || ''
+    }));
+
+  memoryCache.set(cacheKey, results);
+  return results;
+}
+
+/**
  * Utility helper to extract country hint from first sentence of extract
  */
 function extractCountryHint(text) {
@@ -232,3 +280,4 @@ function hashCode(str) {
   }
   return hash;
 }
+

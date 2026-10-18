@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Toast from './components/Toast';
+import AboutModal from './components/AboutModal';
 import ExplorePage from './pages/ExplorePage';
 import MyTripPage from './pages/MyTripPage';
 import { getSavedItinerary, saveItinerary, clearSavedItinerary } from './utils/storage';
@@ -11,6 +12,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('explore');
   const [savedItinerary, setSavedItinerary] = useState(() => getSavedItinerary());
   const [toast, setToast] = useState(null);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   // Sync to localStorage whenever savedItinerary changes
   useEffect(() => {
@@ -73,6 +75,7 @@ export default function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         tripCount={savedItinerary.length}
+        onOpenAbout={() => setIsAboutOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -98,6 +101,9 @@ export default function App() {
       {/* Global Toast Notification */}
       <Toast toast={toast} onClose={() => setToast(null)} />
 
+      {/* About Modal */}
+      <AboutModal isOpen={isAboutOpen} onClose={() => setIsAboutOpen(false)} />
+
       {/* Footer */}
       <Footer
         onGoToExplore={() => {
@@ -108,6 +114,7 @@ export default function App() {
           setActiveTab('mytrip');
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
+        onOpenAbout={() => setIsAboutOpen(true)}
       />
     </div>
   );

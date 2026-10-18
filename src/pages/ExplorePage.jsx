@@ -123,6 +123,23 @@ export default function ExplorePage({
     return new Set(savedItinerary.map((item) => item.id));
   }, [savedItinerary]);
 
+  // Handle selecting a destination from Autocomplete
+  const handleSelectDestination = async (suggestion) => {
+    setSearchQuery(suggestion.title);
+    performSearch(suggestion.title);
+    try {
+      // Fetch full summary so details modal is immediately rich and complete
+      const full = await fetchWikipediaSummary(suggestion.rawTitle || suggestion.title);
+      setSelectedDestination({
+        ...full,
+        category: suggestion.category || 'Global Destination',
+        country: suggestion.country || 'Worldwide'
+      });
+    } catch {
+      setSelectedDestination(suggestion);
+    }
+  };
+
   return (
     <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px 60px' }}>
       {/* Hero Header */}
@@ -131,19 +148,23 @@ export default function ExplorePage({
         setSearchQuery={setSearchQuery}
         onSearchSubmit={handleSearchSubmit}
         onQuickSearch={handleQuickSearch}
+        onSelectDestination={handleSelectDestination}
       />
 
-      {/* Filters & Sorting Bar */}
-      <SearchFilters
-        activeCategory={activeCategory}
-        onCategoryChange={handleCategoryChange}
-        sortBy={sortBy}
-        onSortChange={setSortBy}
-        resultsCount={sortedDestinations.length}
-        isSearching={!!activeSearchQuery}
-        activeSearchQuery={activeSearchQuery}
-        onResetFilters={handleResetFilters}
-      />
+      {/* Anchor for Explore Destinations button */}
+      <div id="destinations-section" style={{ scrollMarginTop: '80px' }}>
+        {/* Filters & Sorting Bar */}
+        <SearchFilters
+          activeCategory={activeCategory}
+          onCategoryChange={handleCategoryChange}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          resultsCount={sortedDestinations.length}
+          isSearching={!!activeSearchQuery}
+          activeSearchQuery={activeSearchQuery}
+          onResetFilters={handleResetFilters}
+        />
+      </div>
 
       {/* Content Rendering: Loading, Error, Empty, or Grid */}
       {loading ? (

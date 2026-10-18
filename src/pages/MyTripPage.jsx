@@ -250,7 +250,7 @@ export default function MyTripPage({
           return (
             <div
               key={dest.id}
-              className="glass-panel"
+              className="glass-panel itinerary-card"
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -264,6 +264,7 @@ export default function MyTripPage({
             >
               {/* Day Badge & Reorder Controls Column */}
               <div
+                className="itinerary-day-col"
                 style={{
                   width: '90px',
                   background: 'rgba(7, 11, 18, 0.65)',

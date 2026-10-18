@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Compass, MapPin, Calendar, Menu, X, Sparkles, Globe } from 'lucide-react';
+import { Compass, Calendar, Menu, X, Info } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, tripCount }) {
+export default function Navbar({ activeTab, setActiveTab, tripCount, onOpenAbout }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleNav = (tab) => {
@@ -16,7 +16,7 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
-          padding: '16px 24px',
+          padding: '14px 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -35,8 +35,8 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
         >
           <div
             style={{
-              width: '42px',
-              height: '42px',
+              width: '40px',
+              height: '40px',
               borderRadius: '12px',
               background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #f43f5e 100%)',
               display: 'flex',
@@ -45,68 +45,53 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
               boxShadow: '0 4px 14px rgba(2, 132, 199, 0.4)',
             }}
           >
-            <Compass size={24} color="#ffffff" strokeWidth={2.2} />
+            <Compass size={22} color="#ffffff" strokeWidth={2.2} />
           </div>
 
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  fontSize: '1.45rem',
-                  fontWeight: 800,
-                  letterSpacing: '-0.03em',
-                  background: 'linear-gradient(to right, #ffffff, #e2e8f0)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                }}
-              >
-                TripWise
-              </span>
-              <span
-                style={{
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                  padding: '2px 8px',
-                  borderRadius: '12px',
-                  background: 'rgba(56, 189, 248, 0.12)',
-                  color: 'var(--blue-light)',
-                  border: '1px solid rgba(56, 189, 248, 0.25)',
-                }}
-              >
-                AWS SBG
-              </span>
-            </div>
+            <span
+              style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: '1.4rem',
+                fontWeight: 800,
+                letterSpacing: '-0.02em',
+                background: 'linear-gradient(to right, #ffffff, #e2e8f0)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              TripWise
+            </span>
             <p
               style={{
                 fontSize: '0.72rem',
                 color: 'var(--text-dim)',
                 letterSpacing: '0.01em',
+                margin: 0,
               }}
             >
-              Smart Travel Planner • Powered by Wikimedia
+              Smart Travel Planner
             </p>
           </div>
         </div>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation Links: Explore, My Trip, About */}
         <nav
           className="desktop-nav"
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            gap: '6px',
           }}
         >
+          {/* Explore */}
           <button
             onClick={() => handleNav('explore')}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '10px 18px',
+              padding: '9px 16px',
               borderRadius: 'var(--radius-pill)',
               fontSize: '0.92rem',
               fontWeight: 600,
@@ -122,17 +107,18 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
                   : '1px solid transparent',
             }}
           >
-            <Compass size={18} color={activeTab === 'explore' ? 'var(--blue-light)' : 'currentColor'} />
+            <Compass size={17} color={activeTab === 'explore' ? 'var(--blue-light)' : 'currentColor'} />
             <span>Explore</span>
           </button>
 
+          {/* My Trip */}
           <button
             onClick={() => handleNav('mytrip')}
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '10px 18px',
+              padding: '9px 16px',
               borderRadius: 'var(--radius-pill)',
               fontSize: '0.92rem',
               fontWeight: 600,
@@ -148,12 +134,12 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
                   : '1px solid transparent',
             }}
           >
-            <Calendar size={18} color={activeTab === 'mytrip' ? 'var(--pink-light)' : 'currentColor'} />
+            <Calendar size={17} color={activeTab === 'mytrip' ? 'var(--pink-light)' : 'currentColor'} />
             <span>My Trip</span>
             <span
               style={{
                 marginLeft: '4px',
-                fontSize: '0.75rem',
+                fontSize: '0.74rem',
                 fontWeight: 700,
                 padding: '2px 8px',
                 borderRadius: '10px',
@@ -167,37 +153,66 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
             </span>
           </button>
 
-          {/* Live API Badge */}
-          <div
+          {/* About */}
+          <button
+            onClick={onOpenAbout}
             style={{
-              marginLeft: '12px',
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              padding: '6px 12px',
+              padding: '9px 16px',
+              borderRadius: 'var(--radius-pill)',
+              fontSize: '0.92rem',
+              fontWeight: 500,
+              color: 'var(--text-muted)',
+              background: 'transparent',
+              border: '1px solid transparent',
+              transition: 'var(--transition-fast)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#ffffff';
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = 'var(--text-muted)';
+              e.currentTarget.style.background = 'transparent';
+            }}
+          >
+            <Info size={16} />
+            <span>About</span>
+          </button>
+
+          {/* Live API Status Dot */}
+          <div
+            style={{
+              marginLeft: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 10px',
               borderRadius: 'var(--radius-pill)',
               background: 'rgba(16, 185, 129, 0.1)',
               border: '1px solid rgba(16, 185, 129, 0.25)',
-              fontSize: '0.75rem',
+              fontSize: '0.74rem',
               color: '#34d399',
               fontWeight: 500,
             }}
-            title="Connected to Wikimedia MediaWiki REST & Action API"
+            title="Connected to Wikimedia MediaWiki APIs"
           >
             <span
               style={{
-                width: '7px',
-                height: '7px',
+                width: '6px',
+                height: '6px',
                 borderRadius: '50%',
                 background: '#10b981',
-                boxShadow: '0 0 8px #10b981',
+                boxShadow: '0 0 6px #10b981',
               }}
             />
             <span>Wikimedia Live</span>
           </div>
         </nav>
 
-        {/* Mobile Hamburger Button */}
+        {/* Mobile Toggle Button */}
         <button
           className="mobile-toggle"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -217,12 +232,12 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
       {mobileMenuOpen && (
         <div
           style={{
-            padding: '16px 24px 24px',
+            padding: '16px 20px 24px',
             borderTop: '1px solid var(--border-subtle)',
             background: 'rgba(7, 11, 18, 0.98)',
             display: 'flex',
             flexDirection: 'column',
-            gap: '12px',
+            gap: '10px',
           }}
         >
           <button
@@ -235,14 +250,14 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
               borderRadius: 'var(--radius-md)',
               background: activeTab === 'explore' ? 'rgba(2, 132, 199, 0.2)' : 'transparent',
               color: activeTab === 'explore' ? 'var(--blue-light)' : 'var(--text-main)',
-              fontSize: '1rem',
+              fontSize: '0.98rem',
               fontWeight: 600,
               width: '100%',
               textAlign: 'left',
             }}
           >
-            <Compass size={20} />
-            <span>Explore Destinations</span>
+            <Compass size={18} />
+            <span>Explore</span>
           </button>
 
           <button
@@ -255,27 +270,50 @@ export default function Navbar({ activeTab, setActiveTab, tripCount }) {
               borderRadius: 'var(--radius-md)',
               background: activeTab === 'mytrip' ? 'rgba(244, 63, 94, 0.2)' : 'transparent',
               color: activeTab === 'mytrip' ? 'var(--pink-light)' : 'var(--text-main)',
-              fontSize: '1rem',
+              fontSize: '0.98rem',
               fontWeight: 600,
               width: '100%',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Calendar size={20} />
-              <span>My Trip Planner</span>
+              <Calendar size={18} />
+              <span>My Trip</span>
             </div>
             <span
               style={{
-                fontSize: '0.8rem',
+                fontSize: '0.78rem',
                 fontWeight: 700,
-                padding: '2px 10px',
-                borderRadius: '12px',
+                padding: '2px 8px',
+                borderRadius: '10px',
                 background: 'var(--pink-accent)',
                 color: '#ffffff',
               }}
             >
               {tripCount} saved
             </span>
+          </button>
+
+          <button
+            onClick={() => {
+              setMobileMenuOpen(false);
+              onOpenAbout();
+            }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              padding: '12px 16px',
+              borderRadius: 'var(--radius-md)',
+              background: 'transparent',
+              color: 'var(--text-muted)',
+              fontSize: '0.98rem',
+              fontWeight: 500,
+              width: '100%',
+              textAlign: 'left',
+            }}
+          >
+            <Info size={18} />
+            <span>About TripWise</span>
           </button>
         </div>
       )}

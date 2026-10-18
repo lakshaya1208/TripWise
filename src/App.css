@@ -1,15 +1,19 @@
 /* ==========================================================================
    TripWise Application Layout & Responsive Styles
+   Fully responsive across: Mobile (375px & 390px), Tablet (768px), Desktop (1024px & 1440px)
    ========================================================================== */
 
 .app-root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .main-content {
   flex: 1;
+  width: 100%;
 }
 
 /* Responsive Navigation */
@@ -18,7 +22,36 @@
     display: none !important;
   }
   .mobile-toggle {
-    display: block !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Touch Friendly Targets (Mobile & Tablet) */
+@media (max-width: 768px) {
+  button, 
+  a, 
+  input, 
+  select {
+    min-height: 40px;
+  }
+
+  .destination-card {
+    border-radius: var(--radius-md) !important;
+  }
+}
+
+/* Extra small mobile adjustments (375px & 390px) */
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2.1rem !important;
+  }
+  
+  .glass-panel {
+    border-radius: var(--radius-md) !important;
   }
 }
 
@@ -29,7 +62,7 @@
   }
   .itinerary-image-col {
     width: 100% !important;
-    height: 180px !important;
+    height: 190px !important;
   }
   .itinerary-day-col {
     width: 100% !important;
@@ -40,10 +73,28 @@
   }
 }
 
-/* Accessibility focus rings */
+/* Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessibility Focus Rings */
 button:focus-visible,
 input:focus-visible,
 select:focus-visible {
   outline: 2px solid var(--blue-light);
   outline-offset: 2px;
+}
+
+/* Prevent Horizontal Overflow */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
 }
