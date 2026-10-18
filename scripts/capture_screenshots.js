@@ -228,6 +228,19 @@ async function run() {
             <img style="max-width: 400px; margin: 0 auto;" src="data:image/png;base64,${fs.readFileSync(screenshot6).toString('base64')}">
           </div>
         </div>
+
+        ${
+          fs.existsSync(path.join(screenshotsDir, '08_error_state.png'))
+            ? `
+        <div class="section">
+          <h2><span class="tag">VIEW 8</span> Reliable Error & Live Retry State</h2>
+          <img src="data:image/png;base64,${fs
+            .readFileSync(path.join(screenshotsDir, '08_error_state.png'))
+            .toString('base64')}">
+        </div>
+        `
+            : ''
+        }
       </body>
     </html>
   `;
